@@ -1,6 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
+// import ReactDOM from "react-dom";
+
 
 const allUsers = ['Michal', 'Kasia', 'Jacek', 'Marta', 'Tomek', 'Ania'];
 
@@ -9,11 +11,12 @@ class App extends React.Component {
     super();
 
     this.state = {
-      filteredUsers: allUsers
+      filteredUsers: allUsers,
+      selectedUser: null
     };
   }
 
-  filterUsers(e) {
+  filterUsers = (e) => {
     const text = e.currentTarget.value;
     const filteredUsers = this.getFilteredUsersForText(text)
     this.setState({
@@ -21,15 +24,22 @@ class App extends React.Component {
     })
   }
 
-  getFilteredUsersForText(text) {
+  getFilteredUsersForText = (text) => {
     return allUsers.filter(user => user.toLowerCase().includes(text.toLowerCase()))
+  }
+
+  onUserSelected = (selectedUser) => {
+    this.setState({
+      selectedUser
+    });
   }
 
   render () {
     return (
         <div>
-          <input onInput={this.filterUsers.bind(this)} />
-          <UsersList users={this.state.filteredUsers} />
+          {this.state.selectedUser}
+          <input onInput={this.filterUsers} />
+          <UsersList userSelected={this.onUserSelected} users={this.state.filteredUsers} />
         </div>
     );
   }
@@ -50,3 +60,4 @@ const UsersList = ({ users }) => {
 };
 
 export default App;
+
