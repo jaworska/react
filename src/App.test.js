@@ -1,15 +1,11 @@
-// import React from 'react';
-// import { render } from '@testing-library/react';
-// import App from './App';
 import React from 'react';
 import { shallow } from 'enzyme';
 import App from './App';
+import UsersList from './UsersList'
 
-// test('renders learn react link', () => {
-//   const { getByText } = render(<App />);
-//   const linkElement = getByText(/learn react/i);
-//   expect(linkElement).toBeInTheDocument();
-// });
+it('renders without crashing', () => {
+  shallow(<App />);
+});
 
 it('includes input', () => {
   const app = shallow(<App />);
@@ -19,4 +15,17 @@ it('includes input', () => {
 it('includes UsersList', () => {
   const app = shallow(<App />);
   expect(app.containsMatchingElement(<UsersList />)).toEqual(true)
+});
+
+it('passes all users to the UsersList', () => {
+  const app = shallow(<App />);
+  expect(app.find('UsersList').prop('users')).toEqual(['Michal', 'Kasia', 'Jacek', 'Marta', 'Tomek', 'Ania']);
+})
+
+it('filters names on input', () => {
+  const app = shallow(<App />);
+  expect(app.find('UsersList').prop('users')).toEqual(['Michal', 'Kasia', 'Jacek', 'Marta', 'Tomek', 'Ania']);
+
+  app.find('input').simulate('input', {currentTarget: {value: 'M'}})
+  expect(app.find('UsersList').prop('users')).toEqual(['Michal', 'Marta', 'Tomek']);
 });

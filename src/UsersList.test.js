@@ -1,10 +1,9 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import App from './App';
+import UsersList from './UsersList';
 
-it('includes input', () => {
-    const app = shallow(<App />);
-    expect(app.containsMatchingElement(<input />)).toEqual(true)
+it('renders without crashing', () => {
+    shallow(<UsersList users={[]} />);
 });
 
 it('shows message when there are no users', () => {
@@ -29,7 +28,19 @@ describe('list of users', () => {
 
     users.forEach(user => {
         it(`includes name ${user} on the list`, () => {
-            expect(usersList.containsMatchingElement(<li>{user}</li>)).toEqual(true)
+            expect(usersList).toContainReact(<li>{user}</li>)
+        });
+    });
+});
+
+describe('change props', () => {
+    const users = ['Jan', 'Maria'];
+    const usersList = shallow(<UsersList users={['Ktoś tam', 'Nieważne']} />);
+    usersList.setProps({ users });
+
+    users.forEach(user => {
+        it(`includes name ${user} on the list`, () => {
+            expect(usersList).toContainReact(<li>{user}</li>)
         });
     });
 });
