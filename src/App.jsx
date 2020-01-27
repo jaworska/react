@@ -1,51 +1,80 @@
 import * as React from 'react';
-import UsersList from './UsersList'
+// import UsersList from './UsersList'
+import { ContactsList } from "./ContactsList";
+import AppHeader  from "./AppHeader";
 
-// z braku laku istniających userów definiuję po prostu jako stałą
-// w prawdziwej aplikacji pochodziliby z API i/lub byli w Reduksowym storze
-const allUsers = ['Michal', 'Kasia', 'Jacek', 'Marta', 'Tomek', 'Ania'];
+export class App extends React.Component {
+    state = {
+        contacts: null
+    };
 
-class App extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            filteredUsers: allUsers,
-            selectedUser: null
-        };
-    }
-
-    filterUsers = (e) => {
-        const text = e.currentTarget.value;
-        const filteredUsers = this.getFilteredUsersForText(text)
-        this.setState({
-            filteredUsers,
-            selectedUser: null
-        })
-    }
-
-    getFilteredUsersForText(text) {
-        return allUsers.filter(user => user.toLowerCase().includes(text.toLowerCase()))
-    }
-
-    onUserSelected = (selectedUser) => {
-        this.setState({
-            selectedUser
-        });
+    componentDidMount() {
+        fetch("https://randomuser.me/api/?format=json&results=10")
+            .then(res => res.json())
+            .then(json => this.setState({ contacts: json.results }));
     }
 
     render() {
+        const contacts = this.state.contacts;
+
         return (
             <div>
-                {this.state.selectedUser}
-                <input onInput={this.filterUsers} />
-                <UsersList userSelected={this.onUserSelected} users={this.state.filteredUsers} />
+                <AppHeader />
+                <main className="ui main text container">
+                    {contacts ? <ContactsList contacts={contacts} /> : 'Ładowanie…'}
+                </main>
             </div>
         );
     }
-};
+}
 
 export default App;
+
+// z braku laku istniających userów definiuję po prostu jako stałą
+// w prawdziwej aplikacji pochodziliby z API i/lub byli w Reduksowym storze
+// const allUsers = ['Michal', 'Kasia', 'Jacek', 'Marta', 'Tomek', 'Ania'];
+//
+// class App extends React.Component {
+//     constructor() {
+//         super();
+//
+//         this.state = {
+//             filteredUsers: allUsers,
+//             selectedUser: null
+//         };
+//     }
+//
+//     filterUsers = (e) => {
+//         const text = e.currentTarget.value;
+//         const filteredUsers = this.getFilteredUsersForText(text)
+//         this.setState({
+//             filteredUsers,
+//             selectedUser: null
+//         })
+//     }
+//
+//     getFilteredUsersForText(text) {
+//         return allUsers.filter(user => user.toLowerCase().includes(text.toLowerCase()))
+//     }
+//
+//     onUserSelected = (selectedUser) => {
+//         this.setState({
+//             selectedUser
+//         });
+//     }
+//
+//     render() {
+//         return (
+//             <div>
+//                 {this.state.selectedUser}
+//                 <input onInput={this.filterUsers} />
+//                 <UsersList userSelected={this.onUserSelected} users={this.state.filteredUsers} />
+//             </div>
+//         );
+//     }
+// };
+//
+// export default App;
 
 
 // import React from 'react';
